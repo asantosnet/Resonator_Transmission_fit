@@ -199,7 +199,7 @@ function [DataTot] = arrange_plot_Data(DataTot,...
                                 
                                 
     AbsS21 = abs(S21);
-    ArgS21 = -(angle(S21)./(pi)).*180; % de -1 à +1 pi
+    ArgS21 = -(angle(S21)./(pi)).*180; % de -1 Ã  +1 pi
  
     
     
@@ -517,79 +517,10 @@ if failed == 0
     Freq_normalizer = ones(size(FrequencyOrig));
     S21_normalizer = interp1(Frequency,abs(S21),FrequencyOrig);
     
-    
-
-    
-    
-    
-    
-    
-%     remove = 0;
-%       
-%     % Remove noise related peaks
-%     
-%     while remove == 0
-%     
-%         [S21_normalizer2,Freq_normalizer2,toremovect] =...
-%             remove_peaks(S21_normalizer,Freq_normalizer,treshold);
-% 
-%         % test threshold  value
-% 
-%         fig = figure('Name','test treshold');
-%         plot(Freq_normalizer,10.*log(abs(S21_normalizer)),'r-o',...
-%             Freq_normalizer2,10.*log(abs(S21_normalizer2)),'b-o');
-% 
-%         promptMessage = sprintf(['Reduce or Increase treshold =',...
-%                                     num2str(treshold),' ?']);
-% 
-%         button = questdlg(promptMessage,'...','Reduce','Increase','No','No');
-% 
-%         if strcmpi(button,'Reduce')
-% 
-%             treshold = treshold - treshold/5;
-%             
-%         elseif strcmpi(button,'Increase')
-% 
-%             treshold = treshold + treshold/5;
-%           
-%         else 
-%             
-%             promptMessage = sprintf('Do you want to remove probable noise related peaks ?');
-% 
-%             button = questdlg(promptMessage,'...','Yes','No','Yes');
-%             
-%             if strcmpi(button,'Yes')
-%             
-%                 remove = 1;
-%             else
-%                 
-%                 remove = 2;
-%                 
-%             end
-%         end
-%         
-%         close(fig);
-%         
-%     end
-%     
-%     %Normalize it
-%     
-%     if remove == 1
-%     
-%         
-%         S21Orig(toremovect,:) = [];
-%         S21_normalizer = S21_normalizer2;
-%         Freq_normalizer = Freq_normalizer2;
-%         
-%     end
-    
     S21normalized = S21Orig./S21_normalizer;
     norm = 'Direct - without swhitch';
     
 end
-
-
-
 
 end
 
@@ -606,44 +537,4 @@ function [Frequency,S21] = readfile(Filename,Pathname)
     Frequency = DataText{1};
     
     S21 = DataText{2} + 1i.*DataText{3};
- 
-
-
 end
-
-% Remove peaks using a simple treshhold condition
-
-function [datay,datax,toremovect] = remove_peaks(datay,datax,treshold)
-
-    logdatay = 10.*log(datay);
-
-    nuremove = 1;
-    
-    toremovect = 0;
-       
-    for pos = 1:size(datay,1) 
-    
-        % at the first and last value leave it be
-        if pos == 1 || pos == size(datay,1)
-            
-        elseif (logdatay(pos) > (logdatay(pos-1)+treshold) &&...
-                logdatay(pos) > (logdatay(pos+1)+treshold) )||  ...
-                (logdatay(pos) < (logdatay(pos-1)-treshold)  && ...
-                logdatay(pos) < (logdatay(pos-1)-treshold))
-    
-                toremovect(nuremove,1) = pos;
-            
-
-                nuremove = nuremove +1;
-        end
-    
-    
-    end
-    
-    
-    
-    datay(toremovect,:) = [];
-    datax(toremovect,:) = [];
-               
-end
-
