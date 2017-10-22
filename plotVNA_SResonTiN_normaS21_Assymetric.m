@@ -191,7 +191,7 @@ function [DataTot] = arrange_plot_Data(DataTot,...
                                 
                                 
     AbsS21 = abs(S21);
-    ArgS21 = -(angle(S21)./(pi)).*180; % de -1 à +1 pi
+    ArgS21 = -(angle(S21)./(pi)).*180; % de -1 Ã  +1 pi
  
     
     
@@ -411,9 +411,10 @@ function [S21normalized,S21_normalizer,Freq_normalizer,failed] = ...
 
         if strcmpi(button,'Yes')
             
-            % Remove any peak that as a difference bigger than 2dBm
-            % related to the previous and next value, e.g. bigger and 
-            % bigger than 2dBm, or smaller and smaller than 2dBm
+            % Normalize the experimental data. Treshold parameter is not important
+            %   You will be asked to select a file from which the program can use its data to
+            %    normalize the original data.
+            
             [S21normalized,S21_normalizer,Freq_normalizer,norm,failed] =...
                 calc_normalize_S21(DataTot,Npower,treshold);
 
